@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Llamadas Node</title>
+  <style>
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    #dialpad {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+    }
+    .dial-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .dial-btn {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 50%;
+      background: #eee;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dial-btn:active {
+      background: #ddd;
+    }
+    #phone-number {
+      width: 100%;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      text-align: center;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+    }
+    #call-btn {
+      width: 100%;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #hangup-btn {
+      background: #f44336;
+      color: white;
+      width: 100%;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+  <script src="https://media.twiliocdn.com/sdk/js/client/v1.13/twilio.js"></script>
+</head>
+<body>
+  <div class="fab" onclick="toggleDialpad()">📞</div>
+  <div id="dialpad">
+    <input id="phone-number" type="text" placeholder="Número a llamar" readonly />
+    <div class="dial-row">
+      <button class="dial-btn" onclick="addNumber('1')">1</button>
+      <button class="dial-btn" onclick="addNumber('2')">2</button>
+      <button class="dial-btn" onclick="addNumber('3')">3</button>
+    </div>
+    <div class="dial-row">
+      <button class="dial-btn" onclick="addNumber('4')">4</button>
+      <button class="dial-btn" onclick="addNumber('5')">5</button>
+      <button class="dial-btn" onclick="addNumber('6')">6</button>
+    </div>
+    <div class="dial-row">
+      <button class="dial-btn" onclick="addNumber('7')">7</button>
+      <button class="dial-btn" onclick="addNumber('8')">8</button>
+      <button class="dial-btn" onclick="addNumber('9')">9</button>
+    </div>
+    <div class="dial-row">
+      <button class="dial-btn" onclick="addNumber('+')">+</button>
+      <button class="dial-btn" onclick="addNumber('0')">0</button>
+      <button class="dial-btn" onclick="addNumber('#')">#</button>
+    </div>
+    <button id="call-btn" onclick="makeCall()">Llamar</button>
+    <button id="call-btn" style="background:#f44336;margin-top:5px;" onclick="clearNumber()">Borrar</button>
+    <button id="hangup-btn" onclick="hangupCall()">Colgar</button>
+  </div>
+  <script>
+    let device;
+
+    async function getTokenAndInit() {
+      const res = await fetch('/token');
+      const data = await res.json();
+
+      device = new Twilio.Device(data.token, { debug: true });
+
+      device.on('ready', function() {
+        console.log('Twilio.Device listo');
+      });
+
+      device.on('connect', function(conn) {
+        document.getElementById('hangup-btn').style.display = 'block';
+        alert('Llamada conectada');
+      });
+
+      device.on('disconnect', function(conn) {
+        document.getElementById('hangup-btn').style.display = 'none';
+        alert('Llamada finalizada');
+      });
+
+      device.on('error', function(error) {
+        alert('Twilio.Device Error: ' + error.message);
+      });
+    }
+
+    function toggleDialpad() {
+      const dialpad = document.getElementById('dialpad');
+      dialpad.style.display = dialpad.style.display === 'block' ? 'none' : 'block';
+    }
+    function addNumber(num) {
+      document.getElementById('phone-number').value += num;
+    }
+    function clearNumber() {
+      document.getElementById('phone-number').value = '';
+    }
+    function makeCall() {
+      const number = document.getElementById('phone-number').value;
+      if (!number) {
+        alert('Introduce un número');
+        return;
+      }
+      device.connect({ To: number });
+    }
+    function hangupCall() {
+      device.disconnectAll();
+    }
+
+    // Llama a esto cuando cargue la página
+    getTokenAndInit();
+  </script>
+</body>
+</html>
