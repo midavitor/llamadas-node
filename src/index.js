@@ -3,12 +3,16 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const twilio = require('twilio');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false })); // <-- Agrega esta línea
+app.use(cors({
+  origin: 'https://llamadas-node.netlify.app' // Cambia esto por tu URL de Netlify
+}));
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
