@@ -114,7 +114,7 @@
     let device;
 
     async function getTokenAndInit() {
-      const res = await fetch('/token');
+      const res = await fetch('https://llamadas-node.onrender.com/token');
       const data = await res.json();
 
       device = new Twilio.Device(data.token, { debug: true });
