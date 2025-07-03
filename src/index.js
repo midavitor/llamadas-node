@@ -23,22 +23,22 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// // Endpoint para llamadas desde el backend (no desde navegador)
-// app.post('/call', async (req, res) => {
-//   const { number } = req.body;
-//   console.log(`Intentando realizar una llamada al número: ${number}`);
-//   try {
-//     await client.calls.create({
-//       to: number,
-//       from: twilioNumber,
-//       url: 'http://demo.twilio.com/docs/voice.xml'
-//     });
-//     res.json({ message: 'Llamada realizada correctamente' });
-//   } catch (error) {
-//     console.error('Error al realizar la llamada:', error.message);
-//     res.status(500).json({ message: 'Error al realizar la llamada', error: error.message });
-//   }
-// });
+// Endpoint para llamadas desde el backend (no desde navegador)
+app.post('/call', async (req, res) => {
+  const { number } = req.body;
+  console.log(`Intentando realizar una llamada al número: ${number}`);
+  try {
+    await client.calls.create({
+      to: number,
+      from: twilioNumber,
+      url: 'http://demo.twilio.com/docs/voice.xml'
+    });
+    res.json({ message: 'Llamada realizada correctamente' });
+  } catch (error) {
+    console.error('Error al realizar la llamada:', error.message);
+    res.status(500).json({ message: 'Error al realizar la llamada', error: error.message });
+  }
+});
 
 // Endpoint para TwiML App (usado por Twilio Client)
 app.post('/voice', (req, res) => {
