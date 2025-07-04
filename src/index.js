@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false })); // <-- Agrega esta línea
 app.use(cors({
-  origin: ['https://llamadas-node.netlify.app', 'http://localhost:5173'] // Cambia esto por tu URL de Netlify
+  origin: ['https://llamadas-node.netlify.app', 'http://localhost:5173']
 }));
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
