@@ -7,13 +7,13 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.urlencoded({ extended: false })); // <-- Agrega esta línea
 app.use(cors({
   origin: ['https://llamadas-node.netlify.app', 'http://localhost:5173']
 }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -43,6 +43,7 @@ app.post('/call', async (req, res) => {
 
 // Endpoint para TwiML App (usado por Twilio Client)
 app.post('/voice', (req, res) => {
+  console.log("POST /voice recibido", req.body);
   const twiml = new twilio.twiml.VoiceResponse();
   const to = req.body.To;
   if (to) {
@@ -74,5 +75,5 @@ app.get('/token', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en ` + process.env.PORT || PORT + `...`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
