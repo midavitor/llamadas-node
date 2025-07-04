@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false })); // <-- Agrega esta línea
 app.use(cors({
@@ -72,7 +72,7 @@ app.get('/token', (req, res) => {
   res.send({ token: token.toJwt(), identity });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en ` + process.env.PORT || PORT + `...`);
 });
