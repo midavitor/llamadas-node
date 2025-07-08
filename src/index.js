@@ -58,7 +58,7 @@ app.post('/voice', (req, res) => {
 // Endpoint para generar token de Twilio Client
 const { jwt: { AccessToken } } = require('twilio');
 app.get('/token', (req, res) => {
-  const identity = 'usuario_navegador_2';
+  const identity = 'usuario_navegador';
   const token = new AccessToken(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_API_KEY_SID,
