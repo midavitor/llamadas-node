@@ -8,7 +8,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: ['https://llamadas-node.netlify.app', 'http://localhost:5173','https://qznr6gwl-5173.use2.devtunnels.ms']
+  origin: ['https://llamadas-node.netlify.app', 'http://localhost:5173','https://qznr6gwl-5173.use2.devtunnels.ms','http://localhost:3000']
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
