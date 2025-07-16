@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 // Endpoint para llamadas desde el backend (no desde navegador)
 app.post('/call', async (req, res) => {
   const { number } = req.body;
-  const toWappNumber = 'whatsapp:' + number; // Construye aquí el número
+  const toWappNumber = `whatsapp:` + number; // Construye aquí el número
   console.log(`Intentando realizar una llamada al número: ${toWappNumber}`);
   try {
     await client.calls.create({
@@ -46,7 +46,7 @@ app.post('/call', async (req, res) => {
 app.post('/voice', (req, res) => {
   console.log("POST /voice recibido", req.body);
   const twiml = new twilio.twiml.VoiceResponse();
-  const to = 'whatsapp:'+ req.body.To;
+  const to = `whatsapp:`+ req.body.To;
   if (to) {
         twiml.dial({ callerId: process.env.TWILIO_NUMBER }).number(to); // TWILIO_MASK_NUMBER para usar mascara TWILIO_NUMBER para no usar mascara
   } else {
