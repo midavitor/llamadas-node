@@ -19,6 +19,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 const client = twilio(accountSid, authToken);
+const toWappNumber = 'whatsapp:'+req.body;
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -26,11 +27,11 @@ app.get('/', (req, res) => {
 
 // Endpoint para llamadas desde el backend (no desde navegador)
 app.post('/call', async (req, res) => {
-  const { number } = req.body;
+  const { number } = toWappNumber;
   console.log(`Intentando realizar una llamada al número: ${number}`);
   try {
     await client.calls.create({
-      to: "whatsapp:"+ number,
+      to: number,
       from: twilioNumber,
       url: 'http://demo.twilio.com/docs/voice.xml'
     });
@@ -43,10 +44,10 @@ app.post('/call', async (req, res) => {
 
 // Endpoint para TwiML App (usado por Twilio Client)
 app.post('/voice', (req, res) => {
-  console.log("POST /voice recibido", req.body);
+  console.log("POST /voice recibido", toWappNumber);
   const twiml = new twilio.twiml.VoiceResponse();
-  const to = "whatsapp:"+ req.body.To;
-  if (to) {
+  //const to = "whatsapp:"+ req.body;
+  if (toWappNumber) {
         twiml.dial({ callerId: process.env.TWILIO_NUMBER }).number(to); // TWILIO_MASK_NUMBER para usar mascara TWILIO_NUMBER para no usar mascara
   } else {
     twiml.say('No se proporcionó un número de destino.');
