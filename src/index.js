@@ -47,7 +47,7 @@ app.post('/voice', (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
   const to = req.body.To;
   if (to) {
-    twiml.dial({ callerId: process.env.TWILIO_MASK_NUMBER }).number(to);
+        twiml.dial({ callerId: process.env.TWILIO_NUMBER }).number(to); // TWILIO_MASK_NUMBER para usar mascara TWILIO_NUMBER para no usar mascara
   } else {
     twiml.say('No se proporcionó un número de destino.');
   }
