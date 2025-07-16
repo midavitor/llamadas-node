@@ -30,7 +30,7 @@ app.post('/call', async (req, res) => {
   console.log(`Intentando realizar una llamada al número: ${number}`);
   try {
     await client.calls.create({
-      to: number,
+      to: 'whatsapp:'+ number,
       from: twilioNumber,
       url: 'http://demo.twilio.com/docs/voice.xml'
     });
