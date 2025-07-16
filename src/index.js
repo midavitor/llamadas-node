@@ -19,7 +19,6 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 const client = twilio(accountSid, authToken);
-const toWappNumber = 'whatsapp:'+req.body.TO;
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -28,6 +27,7 @@ app.get('/', (req, res) => {
 // Endpoint para llamadas desde el backend (no desde navegador)
 app.post('/call', async (req, res) => {
   const { number } = req.body;
+  const toWappNumber = 'whatsapp:' + number; // Construye aquí el número
   console.log(`Intentando realizar una llamada al número: ${toWappNumber}`);
   try {
     await client.calls.create({
